@@ -26,8 +26,8 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public Usuario findByCorreo(String correo) {
-    Usuario buscado = usuarioRepository.findByCorreo(correo).orElse(null);
+    public Usuario findByEmailCliente(String emailCliente) {
+    Usuario buscado = usuarioRepository.findByEmailCliente(emailCliente).orElse(null);
     if (buscado == null) return null;
 
     Usuario dto = new Usuario();
