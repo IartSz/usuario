@@ -51,4 +51,13 @@ public class UsuarioController {
         }
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
+
+    @GetMapping("/correo/{correo}")
+    public ResponseEntity<?> findByCorreo(@PathVariable String correo) {
+    Usuario buscado = usuarioService.findByCorreo(correo);
+    if (buscado == null) {
+        return new ResponseEntity<>("Usuario con correo " + correo + " no existe", HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(buscado, HttpStatus.OK);
+}
 }

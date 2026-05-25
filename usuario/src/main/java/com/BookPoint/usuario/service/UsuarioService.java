@@ -25,4 +25,19 @@ public class UsuarioService {
     public Optional<Usuario> findById(Long id){
         return usuarioRepository.findById(id);
     }
+
+    public Usuario findByCorreo(String correo) {
+    Usuario buscado = usuarioRepository.findByCorreo(correo).orElse(null);
+    if (buscado == null) return null;
+
+    Usuario dto = new Usuario();
+    dto.setIdUsuario(buscado.getIdUsuario());
+    dto.setNombre(buscado.getNombre());
+    dto.setApellido(buscado.getApellido());
+    dto.setEmailCliente(buscado.getEmailCliente());
+    dto.setPassword(buscado.getPassword());
+    dto.setRol(buscado.getRol());
+
+    return dto;
+}
 }
