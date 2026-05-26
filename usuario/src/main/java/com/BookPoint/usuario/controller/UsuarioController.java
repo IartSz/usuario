@@ -16,7 +16,7 @@ import com.BookPoint.usuario.model.Usuario;
 import com.BookPoint.usuario.service.UsuarioService;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/api/v1/usuarios")
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
