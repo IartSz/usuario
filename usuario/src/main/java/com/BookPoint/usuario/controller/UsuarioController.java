@@ -28,7 +28,7 @@ public class UsuarioController {
             if(usuarios.isEmpty()){
                 return new ResponseEntity<>("No hay usuarios registrados", HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(usuarios, HttpStatus.OK)
+            return new ResponseEntity<>(usuarios, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>("Error al obtener usuarios", HttpStatus.CONFLICT);
         }
