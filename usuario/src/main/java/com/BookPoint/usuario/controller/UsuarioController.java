@@ -22,42 +22,55 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> getUsuarios(){
-        List<Usuario> usuarios = usuarioService.listarUsuarios();
-        if(usuarios.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> getUsuarios(){
+        try{
+            List<Usuario> usuarios = usuarioService.listarUsuarios();
+            if(usuarios.isEmpty()){
+                return new ResponseEntity<>("No hay usuarios registrados", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(usuarios, HttpStatus.OK)
+        } catch (Exception e){
+            return new ResponseEntity<>("Error al obtener usuarios", HttpStatus.CONFLICT);
         }
-
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
-    
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> postUsuario(@RequestBody Usuario usuario){
-        Usuario nuevo;
-        try{
-            nuevo = usuarioService.guardarUsuario(usuario);
+    public ResponseEntity<?> postUsuario(@RequestBody Usuario usuario) {
+        try {
+            Usuario nuevo = usuarioService.guardarUsuario(usuario);
+            if (nuevo == null) {
+                return new ResponseEntity<>("No se pudo crear el usuario", HttpStatus.NOT_FOUND);
+            }
             return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Error al crear el usuario", HttpStatus.CONFLICT);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuario(@PathVariable Long id){
-        Usuario usuario = usuarioService.findById(id).orElse(null);
-        if(usuario == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> getUsuario(@PathVariable Long id) {
+        try {
+            Usuario usuario = usuarioService.findById(id).orElse(null);
+            if (usuario == null) {
+                return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Error al buscar usuario", HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
     @GetMapping("/correo/{emailCliente}")
     public ResponseEntity<?> findByEmailCliente(@PathVariable String emailCliente) {
-    Usuario buscado = usuarioService.findByEmailCliente(emailCliente);
-    if (buscado == null) {
-        return new ResponseEntity<>("Usuario con correo " + emailCliente + " no existe", HttpStatus.NOT_FOUND);
+        try {
+            Usuario buscado = usuarioService.findByEmailCliente(emailCliente);
+            if (buscado == null) {
+                return new ResponseEntity<>("Usuario con correo " + emailCliente + " no existe", HttpStatus.NOT_FOUND);
+            }
+
+        return new ResponseEntity<>(buscado, HttpStatus.OK);
+    } catch(RuntimeException e){
+        return new ResponseEntity<>("Error al buscar usuario por correo", HttpStatus.CONFLICT);
     }
-    return new ResponseEntity<>(buscado, HttpStatus.OK);
-}
+    }
 }
