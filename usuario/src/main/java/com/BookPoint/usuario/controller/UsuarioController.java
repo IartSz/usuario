@@ -66,7 +66,8 @@ public class UsuarioController {
                         return ResponseEntity.notFound().build();
                 }
                 return ResponseEntity.ok(EntityModel.of(usuario,
-                                linkTo(methodOn(UsuarioController.class).getUsuarioPorCorreo(emailCliente)).withSelfRel(),
+                                linkTo(methodOn(UsuarioController.class).getUsuarioPorCorreo(emailCliente))
+                                                .withSelfRel(),
                                 linkTo(methodOn(UsuarioController.class).getUsuarios()).withRel("usuarios")));
         }
 
